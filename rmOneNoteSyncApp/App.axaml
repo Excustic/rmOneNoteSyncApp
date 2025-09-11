@@ -1,0 +1,40 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="using:rmOneNoteSyncApp.Converters"
+             x:Class="rmOneNoteSyncApp.App"
+             RequestedThemeVariant="Light">
+    
+    <Application.Styles>
+        <FluentTheme />
+        
+        <!-- Global Button Styles -->
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#2563eb"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="CornerRadius" Value="6"/>
+        </Style>
+        
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="#1d4ed8"/>
+        </Style>
+        
+        <Style Selector="TextBlock.section-title">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+        </Style>
+    </Application.Styles>
+    
+    <Application.Resources>
+        <!-- Register all converters -->
+        <converters:EqualityConverter x:Key="EqualityConverter"/>
+        <converters:ConnectionStateToColorConverter x:Key="ConnectionStateToColorConverter"/>
+        <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
+        <converters:BoolToStatusColorConverter x:Key="BoolToStatusColorConverter"/>
+        <converters:BoolToStatusBrushConverter x:Key="BoolToStatusBrushConverter"/>
+        <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter"/>
+        <converters:BoolAndConverter x:Key="BoolAndConverter"></converters:BoolAndConverter>
+    </Application.Resources>
+</Application>

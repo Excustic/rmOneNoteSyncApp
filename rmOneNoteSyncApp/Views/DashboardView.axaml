@@ -1,0 +1,142 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:rmOneNoteSyncApp.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="950" d:DesignHeight="700"
+             x:Class="rmOneNoteSyncApp.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+    <!-- <UserControl.Styles> -->
+    <!--     ~1~ DataGrid Styles @1@ -->
+    <!--     <Style Selector="DataGrid"> -->
+    <!--         <Setter Property="Background" Value="Transparent"/> -->
+    <!--         <Setter Property="BorderBrush" Value="#e5e7eb"/> -->
+    <!--         <Setter Property="BorderThickness" Value="0"/> -->
+    <!--         <Setter Property="RowBackground" Value="White"/> -->
+    <!--         <Setter Property="AlternatingRowBackground" Value="#fafafa"/> -->
+    <!--         <Setter Property="HeadersVisibility" Value="Column"/> -->
+    <!--         <Setter Property="GridLinesVisibility" Value="Horizontal"/> -->
+    <!--         <Setter Property="HorizontalGridLinesBrush" Value="#e5e7eb"/> -->
+    <!--     </Style> -->
+    <!--      -->
+    <!--     <Style Selector="DataGridColumnHeader"> -->
+    <!--         <Setter Property="Background" Value="#f9fafb"/> -->
+    <!--         <Setter Property="Foreground" Value="#6b7280"/> -->
+    <!--         <Setter Property="FontWeight" Value="SemiBold"/> -->
+    <!--         <Setter Property="Padding" Value="8"/> -->
+    <!--         <Setter Property="SeparatorBrush" Value="#e5e7eb"/> -->
+    <!--     </Style> -->
+    <!--      -->
+    <!--     <Style Selector="DataGridRow"> -->
+    <!--         <Setter Property="FontSize" Value="14"/> -->
+    <!--     </Style> -->
+    <!--      -->
+    <!--     <Style Selector="DataGridCell"> -->
+    <!--         <Setter Property="Padding" Value="8"/> -->
+    <!--     </Style> -->
+    <!-- </UserControl.Styles> -->
+    
+    <ScrollViewer Padding="30" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Spacing="20">
+            <TextBlock Classes="section-title" Text="Dashboard"/>
+            
+            <!-- Device Info Card -->
+            <Border Background="White" CornerRadius="8" BoxShadow="0 2 10 0 #10000000" Padding="20">
+                <Grid ColumnDefinitions="Auto,*">
+                    <StackPanel Grid.Column="0" Margin="0,0,40,0">
+                        <PathIcon Data="M17,2H7A2,2 0 0,0 5,4V20A2,2 0 0,0 7,22H17A2,2 0 0,0 19,20V4A2,2 0 0,0 17,2M7,4H17V20H7V4Z"
+                                 Width="64" Height="64" Foreground="#3a3d4e"/>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Column="1" Spacing="8">
+                        <TextBlock Text="reMarkable Paper Pro" FontSize="20" FontWeight="SemiBold"/>
+                        
+                        <Grid ColumnDefinitions="120,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="6">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Status:" Foreground="#666"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding DeviceStatus}" FontWeight="SemiBold">
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush Color="{Binding IsConnected, Converter={StaticResource BoolToStatusColorConverter}}"/>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                            
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="IP Address:" Foreground="#666"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding DeviceIp, FallbackValue='--'}"/>
+                            
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Last Connected:" Foreground="#666"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding LastConnected, FallbackValue='Never'}"/>
+                            
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="WiFi Status:" Foreground="#666"/>
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding WifiStatus, FallbackValue='Unknown'}"/>
+                            
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Storage:" Foreground="#666"/>
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding StorageInfo, FallbackValue='-- / --'}"/>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            
+            <!-- Sync Statistics -->
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="20">
+                <!-- Total Documents -->
+                <Border Grid.Column="0" Background="White" CornerRadius="8" BoxShadow="0 2 10 0 #10000000" Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="Total Documents" Foreground="#666" FontSize="12" Margin="0,0,0,8"/>
+                        <TextBlock Text="{Binding TotalDocuments}" FontSize="32" FontWeight="Bold" Foreground="#3a3d4e"/>
+                        <TextBlock Text="{Binding TotalPages, StringFormat='{}{0} pages'}" Foreground="#999" FontSize="12" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+                
+                <!-- Synced Documents -->
+                <Border Grid.Column="1" Background="White" CornerRadius="8" BoxShadow="0 2 10 0 #10000000" Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="Synced" Foreground="#666" FontSize="12" Margin="0,0,0,8"/>
+                        <TextBlock Text="{Binding SyncedDocuments}" FontSize="32" FontWeight="Bold" Foreground="#10b981"/>
+                        <TextBlock Text="{Binding LastSyncTime, StringFormat='Last: {0}'}" Foreground="#999" FontSize="12" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+                
+                <!-- Pending Sync -->
+                <Border Grid.Column="2" Background="White" CornerRadius="8" BoxShadow="0 2 10 0 #10000000" Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="Pending" Foreground="#666" FontSize="12" Margin="0,0,0,8"/>
+                        <TextBlock Text="{Binding PendingDocuments}" FontSize="32" FontWeight="Bold" Foreground="#f59e0b"/>
+                        <Button Content="Sync Now" 
+                               Command="{Binding SyncNowCommand}"
+                               Margin="0,8,0,0"
+                               Classes="primary"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+            
+            <!-- Recent Activity -->
+            <Border Background="White" CornerRadius="8" BoxShadow="0 2 10 0 #10000000" Padding="20">
+                <StackPanel>
+                    <TextBlock Text="Recent Activity" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,15"/>
+                    
+                    <DataGrid ItemsSource="{Binding RecentActivities}"
+                             AutoGenerateColumns="False"
+                             CanUserReorderColumns="False"
+                             CanUserResizeColumns="True"
+                             GridLinesVisibility="Horizontal"
+                             BorderThickness="0"
+                             MinHeight="200">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Time" 
+                                              Binding="{Binding Timestamp, StringFormat='{}{0:HH:mm:ss}'}" 
+                                              Width="100"/>
+                            <DataGridTextColumn Header="Document" 
+                                              Binding="{Binding DocumentName}" 
+                                              Width="*"/>
+                            <DataGridTextColumn Header="Action" 
+                                              Binding="{Binding Action}" 
+                                              Width="150"/>
+                            <DataGridTextColumn Header="Status" 
+                                              Binding="{Binding Status}" 
+                                              Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

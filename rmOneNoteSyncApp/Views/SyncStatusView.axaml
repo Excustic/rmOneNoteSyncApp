@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="rmOneNoteSyncApp.Views.SyncStatusView">
+    
+    <ScrollViewer Padding="30" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Spacing="20">
+            <TextBlock Classes="section-title" Text="Sync Status"/>
+            
+            <Border Background="White" CornerRadius="8" BoxShadow="0 2 10 0 #10000000" Padding="20">
+                <TextBlock Text="Sync status information will appear here"/>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
