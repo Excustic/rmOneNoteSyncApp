@@ -167,6 +167,9 @@
                             <DataTemplate DataType="{x:Type vm:FolderPickerViewModel}">
                                 <views:FileBrowserView />
                             </DataTemplate>
+                            <DataTemplate DataType="{x:Type vm:SyncStatusViewModel}">
+                                <views:SyncStatusView />
+                            </DataTemplate>
                             <DataTemplate DataType="{x:Type vm:LogsViewModel}">
                                 <views:LogsView></views:LogsView>
                             </DataTemplate>

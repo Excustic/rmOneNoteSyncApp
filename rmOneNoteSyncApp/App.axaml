@@ -1,7 +1,9 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="using:rmOneNoteSyncApp.Converters"
+             xmlns:vm="clr-namespace:rmOneNoteSyncApp.ViewModels"
              x:Class="rmOneNoteSyncApp.App"
+             x:DataType="vm:ApplicationViewModel"
              RequestedThemeVariant="Light">
     
     <Application.Styles>
@@ -37,4 +39,20 @@
         <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter"/>
         <converters:BoolAndConverter x:Key="BoolAndConverter"></converters:BoolAndConverter>
     </Application.Resources>
+    
+    <TrayIcon.Icons>
+        <TrayIcons>
+            <TrayIcon Icon="/Assets/avalonia-logo.ico" 
+                      ToolTipText="Avalonia Tray Icon ToolTip"
+                      Command="{Binding OpenApplicationCommand}">
+                <TrayIcon.Menu>
+                    <NativeMenu>
+                        <NativeMenuItem Header="Restart service on device"/>
+                        <NativeMenuItemSeparator/>
+                        <NativeMenuItem Header="Exit" Command="{Binding ExitApplicationCommand}"/>
+                    </NativeMenu>
+                </TrayIcon.Menu>
+            </TrayIcon>
+        </TrayIcons>
+    </TrayIcon.Icons>
 </Application>

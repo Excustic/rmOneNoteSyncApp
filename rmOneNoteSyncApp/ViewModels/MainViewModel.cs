@@ -84,7 +84,7 @@ public partial class MainViewModel : ViewModelBase
         _logger = logger;
         
         // Initialize with Dashboard view model
-        CurrentViewModel = App.ServiceProvider.GetRequiredService<DashboardViewModel>();
+        CurrentViewModel = App.ServiceProvider?.GetRequiredService<DashboardViewModel>();
         
         // Check testing mode
         if (AppSettings.TestingMode)
@@ -334,8 +334,8 @@ public partial class MainViewModel : ViewModelBase
             "Dashboard" => App.ServiceProvider?.GetRequiredService<DashboardViewModel>(),
             "FileBrowser" => App.ServiceProvider?.GetRequiredService<FolderPickerViewModel>(),
             "Settings" => App.ServiceProvider?.GetRequiredService<SettingsViewModel>(),
-            "SyncStatus" => new ViewModelBase(), // Placeholder - create SyncStatusViewModel later
-            "Logs" => App.ServiceProvider?.GetRequiredService<LogsViewModel>(), // Placeholder - create LogsViewModel later
+            "SyncStatus" => App.ServiceProvider?.GetRequiredService<SyncStatusViewModel>(),
+            "Logs" => App.ServiceProvider?.GetRequiredService<LogsViewModel>(),
             _ => CurrentViewModel
         };
         

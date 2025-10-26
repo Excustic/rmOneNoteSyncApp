@@ -374,56 +374,61 @@ public partial class FolderPickerViewModel : ViewModelBase
         }
     }
     
-    [RelayCommand]
-    private async Task SaveSelectionAsync()
+    // In FolderPickerViewModel.cs - Update the SaveSelectionAsync method:
+
+[RelayCommand]
+private async Task SaveSelectionAsync()
+{
+    try
     {
-        try
+        // Collect all selected document IDs
+        var selectedIds = new List<string>();
+        foreach (var root in Folders)
         {
-            // Collect all selected document IDs
-            var selectedIds = new List<string>();
-            foreach (var root in Folders)
-            {
-                selectedIds.AddRange(root.GetSelectedDocumentIds());
-            }
-            
-            _logger?.LogInformation("Saving selection: {Count} documents", selectedIds.Count);
-            
-            // Save to database
-            _syncConfiguration ??= new SyncConfiguration();
-            _syncConfiguration.SyncFiles.Clear();
-            
-            // Group by parent folder for organized storage
-            foreach (var root in Folders)
-            {
-                SaveFolderSelection(root, _syncConfiguration);
-            }
-            
-            await _databaseService.SaveConfigurationAsync(_syncConfiguration);
-            
-            StatusMessage = $"Selection saved: {selectedIds.Count} documents will be synced";
+            selectedIds.AddRange(root.GetSelectedDocumentIds());
         }
-        catch (Exception ex)
+        
+        _logger?.LogInformation("Saving selection: {Count} documents", selectedIds.Count);
+        
+        // Save to database
+        var config = await _databaseService.GetConfigurationAsync() ?? new SyncConfiguration();
+        config.SyncFiles = selectedIds;
+        await _databaseService.SaveConfigurationAsync(config);
+        
+        StatusMessage = $"Saved {selectedIds.Count} documents to sync";
+        
+        // IMPORTANT: Update the reMarkable configuration
+        if (_sshService.IsConnected)
         {
-            _logger?.LogError(ex, "Failed to save selection");
-            StatusMessage = $"Error saving selection: {ex.Message}";
+            StatusMessage = "Updating reMarkable configuration...";
+            
+            var configProvider = App.ServiceProvider?.GetService<IConfigurationProviderService>();
+            if (configProvider != null)
+            {
+                var success = await configProvider.UpdateDeviceConfigurationAsync();
+                if (success)
+                {
+                    StatusMessage = $"✅ Configuration synced to reMarkable! {selectedIds.Count} documents will sync.";
+                    _logger?.LogInformation("Successfully updated reMarkable configuration");
+                }
+                else
+                {
+                    StatusMessage = "⚠️ Failed to update reMarkable. Check connection and try again.";
+                    _logger?.LogWarning("Failed to update reMarkable configuration");
+                }
+            }
+        }
+        else
+        {
+            StatusMessage = "⚠️ reMarkable not connected. Connect device to apply configuration.";
         }
     }
-    
-    private void SaveFolderSelection(FileNode node, SyncConfiguration config)
+    catch (Exception ex)
     {
-        if (node.SelectionState == false) return;
-        if (!node.IsFolder)
-        {
-            config.SyncFiles.Add(node.Id);
-        }
-        else if (node.Children != null)
-        {
-            foreach (var child in node.Children)
-            {
-                SaveFolderSelection(child, config);
-            }
-        }
+        _logger?.LogError(ex, "Failed to save selection");
+        StatusMessage = $"❌ Error: {ex.Message}";
     }
+}
     
     // Update LoadFoldersAsync to set HasLoadedFolders
     partial void OnFoldersChanged(ObservableCollection<FileNode> value)

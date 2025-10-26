@@ -61,13 +61,19 @@ class Program
                 services.AddSingleton<IDatabaseService, SqliteDatabaseService>();
                 services.AddSingleton<ISyncService, SyncService>();
                 services.AddSingleton<IOneNoteAuthService, OneNoteAuthService>();
+                services.AddSingleton<IConfigurationProviderService, ConfigurationProviderService>();
+                services.AddSingleton<ISyncServerService, SyncServerService>();
+                services.AddSingleton<IOneNoteClient, OneNoteClient>();
                 
                 // Register ViewModels
                 services.AddSingleton<MainViewModel>();
-                services.AddSingleton<SettingsViewModel>();
-                services.AddSingleton<FolderPickerViewModel>();
                 services.AddSingleton<DashboardViewModel>();
+                services.AddSingleton<FolderPickerViewModel>();
+                services.AddSingleton<SyncStatusViewModel>();
+                services.AddSingleton<SettingsViewModel>();
                 services.AddSingleton<LogsViewModel>();
+
+                services.AddHostedService<SyncServerHostedService>();
                 
                 // Register the main application
                 services.AddSingleton<App>();

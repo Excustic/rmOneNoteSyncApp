@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Client;
@@ -226,7 +227,7 @@ public static class TokenCacheHelper
         "rmOneNoteSyncApp",
         "msalcache.bin");
     
-    private static readonly object FileLock = new object();
+    private static readonly Lock FileLock = new();
     
     public static void EnableSerialization(ITokenCache tokenCache)
     {
